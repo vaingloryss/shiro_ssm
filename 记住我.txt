@@ -1,0 +1,17 @@
+1、记住我
+在登录后，可以将用户名存在cookie中，下次访问时，可以先不登录，就可以识别身份。
+在确实需要身份认证时，比如购买，支付或其他一些重要操作时，再要求用户登录即可，用户体验好。
+
+“记住我”起点在登录时刻：Subject.login(UsernameAndPasswordToken)
+而是否确定要“记住我”，由登录时的token控制开关："token.setRememberMe(true);"
+
+2、使用：
+仅需要在登录之前设置记住我即可：
+//如果需要记住我的话，需要在token中设置
+token.setRememberMe(true);
+subject.login(token);
+shiro默认支持”记住我“，只要有此设置则自动运作。
+
+用户登录之后，会在浏览器保存一个叫rememberMe的cookie，用于保存用户的登录信息，默认有效期为1年
+
+如果用户点击了登出（即logout方法执行了）客户端名为rememberMe的cookie自动失效

@@ -10,13 +10,21 @@
 </head>
 <body>
 <h3>学生成绩单</h3>
-<shiro:authenticated>
-	<%--获取用户名--%>
+<%--<shiro:authenticated>
+	&lt;%&ndash;获取用户名&ndash;%&gt;
 	<label>
 		欢迎您，
 		<shiro:principal/>
 	</label>
-</shiro:authenticated>
+</shiro:authenticated>--%>
+
+<shiro:user>
+    <%--获取用户名--%>
+    <label>
+        欢迎您，
+        <shiro:principal/>
+    </label>
+</shiro:user>
 
 <a href="${pageContext.request.contextPath}/userController/logout">退出</a>
 <table border="1" style="">

@@ -59,7 +59,6 @@ public class CustomJdbcRealm extends AuthorizingRealm{
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("在realm中查询权限");
         // 获取当前用户的用户名
         String username = (String)principals.getPrimaryPrincipal();
         // 查询当前用户的所有 权限信息：
@@ -70,15 +69,8 @@ public class CustomJdbcRealm extends AuthorizingRealm{
         //PermissionService permissionService = ContextLoader.getCurrentWebApplicationContext().getBean("permissionServiceImpl", PermissionService.class);
         // 查询当前用户的权限信息
         Set<String> roles = roleService.queryAllRolenameByUsername(username);
-        System.out.println("---------角色----------");
-        for (String role : roles) {
-            System.out.println(role);
-        }
         Set<String> perms = permissionService.queryAllPermissionByUsername(username);
-        System.out.println("---------权限----------");
-        for (String perm : perms) {
-            System.out.println(perm);
-        }
+
         // 将查询出的信息 封装
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo(roles);
         simpleAuthorizationInfo.setStringPermissions(perms);
@@ -95,10 +87,8 @@ public class CustomJdbcRealm extends AuthorizingRealm{
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        System.out.println("在Realm中查询身份");
         // 获取用户登录时发送来的用户名
         String username = (String)token.getPrincipal();
-        System.out.println("身份："+username);
         // 查询用户信息： UserService:public User queryUserByUsername(String username);
         //UserService userService = ContextLoader.getCurrentWebApplicationContext().getBean("userServiceImpl", UserService.class);
         //查询到用户信息

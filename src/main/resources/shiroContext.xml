@@ -45,7 +45,7 @@
         <property name="filterChainDefinitions">
             <value>
                 /userController/login = anon
-                /userController/getScoreList = authc,perms["scoreItem:query"]
+                /userController/getScoreList = anon
                 /userController/updateScore=authc,perms["scoreItem:update"]
                 /userController/deleteScore=authc,perms["scoreItem:delete"]
                 /userController/logout=logout

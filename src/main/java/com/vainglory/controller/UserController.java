@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -34,6 +35,11 @@ public class UserController {
     public String error(){
         return "error";
     }
+    @GetMapping("toScoreList")
+    public String toScoreList(){
+        return "scoreList";
+    }
+
 
     @GetMapping("updateScore")
     public String toUpdateScore(Integer scoreId,Model model){
@@ -50,10 +56,16 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public String login(User user){
+    public String login(User user,@RequestParam(value = "rememberMe",required = false) String rememberMe){
         System.out.println("login ...");
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+
+        //记住我
+        if(rememberMe!=null){
+            System.out.println(rememberMe);
+            token.setRememberMe(true);
+        }
         subject.login(token);
         return "forward:getScoreList";
     }
