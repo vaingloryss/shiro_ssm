@@ -1,0 +1,41 @@
+1、shiro与spring集成
+
+shiro的组件都是pojo组件，非常容易用spring管理，可以方便的从ini迁移到spring
+
+之前的Realm中一直有如下代码：
+UserService userService =(UserService)ContextLoader.getCurrentWebApplicationContext().getBean("xx");
+这是由于Realm还未进入spring工厂，所以无法直接注入工厂内部的DAO组件
+
+2、步骤
+第一步：添加依赖
+shiro-spring
+该依赖会传递依赖shiro-core、shiro-web
+
+第二步：修改CustomJdbcRealm
+UserService userService =(UserService)ContextLoader.getCurrentWebApplicationContext().getBean("xx");
+删除掉CustomJdbcRealm中类似的语句，声明需要的服务层接口引用并添加getter和setter方法（用于在shiroContext文件中注入）。
+
+第三步：在applicationContext中配置shiro
+这里为了更加清晰，新建一个 shiroContext.xml文件，并将其引入到applicationContext中
+
+
+** 声明自定义的Realm，注入服务层组件以及密码比对器，在密码比对器中声明加密规则是
+** 声明securityManager，并指定声明的自定义Realm
+** 声明shiroFilter，指定securityManager，并声明过滤器链以及过滤结果所对应的路径信息
+** 声明shiroFilter，指定securityManager，并声明过滤器链以及过滤结果所对应的路径信息
+
+将shiroContext配置文件引入到applicationContext中：
+<import resource="classpath:shiroContext.xml"/>
+
+
+问题：
+关于登录一次，自定义的Realm中的两个方法各执行了6次。
+<shiro:hasPermission name="scoreItem:update">
+    <a href="${pageContext.request.contextPath}/userController/updateScore?scoreId=${scoreItem.id }">修改</a>&nbsp;
+</shiro:hasPermission>
+hasPermission标签循查询了六次用户权限。
+
+
+
+
+
