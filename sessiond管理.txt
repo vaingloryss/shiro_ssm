@@ -1,0 +1,28 @@
+1、shiro提供了一整套session管理方案.
+    1. shiro的session方案和任何容器无关(如servlet容器)；
+    2. javaSE也可以使用；相关组件都是pojo对ioc极其友好(方便的管理对象和满足依赖关系，定制参数)
+    3. 可以方便的扩展定制存储位置(内存，缓存，数据库等)
+    4. 对web透明支持：用了shiro的session后，项目中关于session的代码完全不用任何改动
+    5. 提供了全面的session监听机制，和session检测机制，对session可以细粒度操作
+    即，使用了shiro后，采用shiro的session方案是最优的方案。
+
+2、session监听
+session有三个核心过程：创建、过期、停止
+    ** 过期：session的默认过期时间为30分钟。通过比对最近一次使用时间和当前使用时间判断
+    session不会自动报告过期，需检测器检测时，或再次访问时，才可以识别是否过期并移除。
+    ** 停止：用户主动`logout`；主动调用`session.stop()`; 两种情况会将session标志为停止状态。
+
+自定义监听器类：继承SessionListenerAdapter类，重写有关Session生命周期的三个方法
+public class MySessionListener extends SessionListenerAdapter{}
+在shiroContext配置文件中配置Session监听器类，并关联给SessionManager
+
+3、Session检测
+用户如果没有主动退出登录，只是关闭浏览器，则session是否过期无法获知，也就不能停止session。
+为此，shiro提供了session的检测机制，可以定时发起检测，识别session过期 并停止session。
+
+在SessionManager配置Session过期检测器
+sessionManager默认开启session检测机制
+
+通过检测器，定时的检测session，并及时移除无效session，释放资源。
+
+
